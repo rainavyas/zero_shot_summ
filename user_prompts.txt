@@ -1,0 +1,2 @@
+"Summarise these clinical notes."
+"Give a very short summary for these clinical notes."
