@@ -35,7 +35,7 @@ if __name__ == "__main__":
         f.write(' '.join(sys.argv)+'\n')
 
     # Read the whole dataset
-    data = pd.read_csv(args.load_path)
+    data = pd.read_csv(args.data_path)
 
     # load prompts
     with open(args.sys_prompt_path, 'r') as f:
@@ -53,6 +53,7 @@ if __name__ == "__main__":
             {"role": "user", "content": user_prompt}
         ]
         response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=msgs)
+        import pdb; pdb.set_trace()
         gpt_summs.append(response['choices'][0]['message']['content'])
     
     data['ChatGPT Summary'] = gpt_summs
