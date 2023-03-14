@@ -48,9 +48,10 @@ if __name__ == "__main__":
 
     gpt_summs = []
     for _, row in tqdm(data.iterrows()):
+        content = content_merge(row)
         msgs = [
             {"role": "system", "content": sys_prompt},
-            {"role": "user", "content": user_prompt}
+            {"role": "user", "content": f'{user_prompt}\n{content}'}
         ]
         response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=msgs)
         import pdb; pdb.set_trace()
