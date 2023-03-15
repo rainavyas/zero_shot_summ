@@ -47,7 +47,7 @@ if __name__ == "__main__":
     user_prompt = user_prompts[args.user_prompt_ind].rstrip('\n') 
 
     gpt_summs = []
-    for _, row in tqdm(data.iterrows()):
+    for _, row in tqdm(data.iterrows(), total=len(data)):
         content = content_merge(row)
         msgs = [
             {"role": "system", "content": sys_prompt},
