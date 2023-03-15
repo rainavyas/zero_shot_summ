@@ -54,7 +54,6 @@ if __name__ == "__main__":
             {"role": "user", "content": f'{user_prompt}\n{content}'}
         ]
         response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=msgs)
-        import pdb; pdb.set_trace()
         gpt_summs.append(response['choices'][0]['message']['content'])
     
     data['ChatGPT Summary'] = gpt_summs
