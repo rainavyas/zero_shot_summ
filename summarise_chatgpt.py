@@ -8,6 +8,7 @@ import os
 import argparse
 import pandas as pd
 from tqdm import tqdm
+import time
 
 def content_merge(row):
     text = f'''Assessment: {row["Assessment"]}\n
@@ -55,6 +56,7 @@ if __name__ == "__main__":
         ]
         response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=msgs)
         gpt_summs.append(response['choices'][0]['message']['content'])
+        time.sleep(3.1) # necessary for open ai rate limit
     
     data['ChatGPT Summary'] = gpt_summs
 
