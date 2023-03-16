@@ -4,6 +4,7 @@ import argparse
 import pandas as pd
 from tqdm import tqdm
 from rouge_score import rouge_scorer
+from statistics import mean
 
 
 if __name__ == "__main__":
@@ -31,6 +32,12 @@ if __name__ == "__main__":
         scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
         for _, row in tqdm(data.iterrows(), total=len(data)):
             score = scorer.score(row['Summary'], row[args.pred_name])
-            import pdb; pdb.set_trace()
+            rouge1.append(score['rouge1'][2])
+            rouge2.append(score['rouge2'][2])
+            rougeL.append(score['rougeL'][2])
+    
+    print(f'Rouge-1\t{mean(rouge1)}')
+    print(f'Rouge-2\t{mean(rouge2)}')
+    print(f'Rouge-L\t{mean(rougeL)}')
 
     
