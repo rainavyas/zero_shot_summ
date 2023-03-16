@@ -31,7 +31,7 @@ if __name__ == "__main__":
         rougeL = []
         scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
         for _, row in tqdm(data.iterrows(), total=len(data)):
-            score = scorer.score(row['Summary'], row[args.pred_name])
+            score = scorer.score(str(row['Summary']), str(row[args.pred_name]))
             rouge1.append(score['rouge1'][2])
             rouge2.append(score['rouge2'][2])
             rougeL.append(score['rougeL'][2])
