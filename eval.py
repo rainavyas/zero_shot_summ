@@ -30,7 +30,7 @@ if __name__ == "__main__":
         rougeL = []
         scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
         for _, row in tqdm(data.iterrows(), total=len(data)):
-            score = scorer.score(row['Summary'])
+            score = scorer.score(row['Summary'], row[args.pred_name])
             import pdb; pdb.set_trace()
 
     
