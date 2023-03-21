@@ -27,7 +27,7 @@ if __name__ == "__main__":
     commandLineParser.add_argument('--data_path', type=str, default='../../bionlp2023-1a-train-og.csv', help='path to data')
     commandLineParser.add_argument('--folds_path', type=str, default='/home/alta/relevance/vr311/bionlp/split.npy', help='path to fold splits')
     commandLineParser.add_argument('--fold', type=int, default=0, help='select fold of data to evaluate upon')
-    commandLineParser.add_argument('--out_dir', type=str, default='experiments/generated_summaries', help='path to dir to save output summaries')
+    commandLineParser.add_argument('--out_dir', type=str, default='experiments/generated_summaries/incontext', help='path to dir to save output summaries')
     commandLineParser.add_argument('--sys_prompt_path', type=str, default='src/prompts/system_prompts.txt', help='select system prompt')
     commandLineParser.add_argument('--sys_prompt_ind', type=int, default=0, help='file for system prompts')
     commandLineParser.add_argument('--user_prompt_path', type=str, default='src/prompts/user_prompts_context.txt', help='file for user prompts')
