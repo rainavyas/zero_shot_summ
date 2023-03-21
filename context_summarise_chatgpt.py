@@ -52,7 +52,7 @@ if __name__ == "__main__":
     folds = np.load(args.folds_path)
     train = data.iloc[~folds[args.fold]]
     test = data.iloc[folds[args.fold]]
-    import pdb; pdb.set_trace()
+    test = test.reset_index()
 
     # select k-training examples only
     train = train.sample(n=args.k, replace=False, random_state=args.seed)
