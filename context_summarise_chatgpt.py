@@ -12,6 +12,14 @@ import numpy as np
 
 from src.tools.tools import content_merge
 
+def create_examples(train):
+    msgs = []
+    for row in train.iterrows():
+        content = content_merge(row)
+        msg = {"role": "user", "content":f'This is an example of clinical notes:\n{content}\n Their summary is\n{row["Summary"]}'}
+        msgs.append(msg)
+    return msgs
+
 if __name__ == "__main__":
 
     # Get command line arguments
@@ -24,6 +32,7 @@ if __name__ == "__main__":
     commandLineParser.add_argument('--sys_prompt_ind', type=int, default=0, help='file for system prompts')
     commandLineParser.add_argument('--user_prompt_path', type=str, default='src/prompts/user_prompts_context.txt', help='file for user prompts')
     commandLineParser.add_argument('--user_prompt_ind', type=int, default=0, help='select user prompt')
+    commandLineParser.add_argument('--k', type=int, default=3, help='number of examples for k-shot in-context learning')
     commandLineParser.add_argument('--seed', type=int, default=1, help='select seed for reproducibility')
     args = commandLineParser.parse_args()
 
@@ -40,7 +49,10 @@ if __name__ == "__main__":
     folds = np.load(args.folds_path)
     train = data.iloc[~folds[args.fold]]
     test = data.iloc[folds[args.fold]]
-    import pdb; pdb.set_trace()
+
+    # select k-training examples only
+    train = train.sample(n=args.k, replace=False, random_state=args.seed)
+    context_examples = create_examples(train)
 
     # load prompts
     with open(args.sys_prompt_path, 'r') as f:
@@ -52,14 +64,17 @@ if __name__ == "__main__":
     user_prompt = user_prompts[args.user_prompt_ind].rstrip('\n') 
 
     gpt_summs = []
-    for _, row in tqdm(data.iterrows(), total=len(data)):
+    for _, row in tqdm(test.iterrows(), total=len(test)):
         content = content_merge(row)
-        msgs = [
-            {"role": "system", "content": sys_prompt},
-            {"role": "user", "content": f'{user_prompt}\n{content}'}
-        ]
+        msgs = [{"role": "system", "content": sys_prompt}] + context_examples
+        msgs.append({"role": "user", "content": f'{user_prompt}\n{content}'})
+    
         response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=msgs)
         gpt_summs.append(response['choices'][0]['message']['content'])
         # time.sleep(3.1) # necessary for open ai rate limit
     
-    data['ChatGPT Summary'] = gpt_summs
+    test['ChatGPT Summary'] = gpt_summs
+
+    # save data
+    out_file = f'{args.out_dir}/context_chatgpt_system{args.sys_prompt_ind}_user{args.user_prompt_ind}_exs{args.k}_fold{args.fold}.csv'
+    test.to_csv(out_file)
