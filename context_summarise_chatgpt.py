@@ -17,8 +17,9 @@ def create_examples(train):
     for _, row in train.iterrows():
         content = content_merge(row)
         msg1 = {"role": "user", "content":f'This is an example of clinical notes:\n{content}\n Their summary is\n{row["Summary"]}'}
-        msg2 = {"role": "assistant", "content":"Okay, I understand."}
-        msgs += [msg1, msg2]
+        # msg2 = {"role": "assistant", "content":"Okay, I understand."}
+        # msgs += [msg1, msg2]
+        msgs.append(msg1)
     return msgs
 
 if __name__ == "__main__":
