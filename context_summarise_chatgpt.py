@@ -73,7 +73,13 @@ if __name__ == "__main__":
         msgs = [{"role": "system", "content": sys_prompt}] + context_examples
         msgs.append({"role": "user", "content": f'{user_prompt}\n{content}'})
     
-        response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=msgs)
+        try:
+            response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=msgs)
+        except:
+            print("This sample is too long so not using example in context.")
+            msgs = [{"role": "system", "content": sys_prompt}]
+            msgs.append({"role": "user", "content": f'{user_prompt}\n{content}'})
+            response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=msgs)
         gpt_summs.append(response['choices'][0]['message']['content'])
         time.sleep(2.0) # necessary for open ai rate limit
     
