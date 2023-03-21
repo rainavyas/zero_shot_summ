@@ -75,7 +75,7 @@ if __name__ == "__main__":
     
         response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=msgs)
         gpt_summs.append(response['choices'][0]['message']['content'])
-        time.sleep(1.0) # necessary for open ai rate limit
+        time.sleep(1.25) # necessary for open ai rate limit
     
     test['ChatGPT Summary'] = gpt_summs
 
