@@ -14,7 +14,7 @@ from src.tools.tools import content_merge
 
 def create_examples(train):
     msgs = []
-    for row in train.iterrows():
+    for _, row in train.iterrows():
         content = content_merge(row)
         msg = {"role": "user", "content":f'This is an example of clinical notes:\n{content}\n Their summary is\n{row["Summary"]}'}
         msgs.append(msg)
