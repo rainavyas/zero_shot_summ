@@ -9,7 +9,7 @@ import argparse
 import pandas as pd
 from tqdm import tqdm
 
-from src.tools import content_merge
+from src.tools.tools import content_merge
         
 
 if __name__ == "__main__":

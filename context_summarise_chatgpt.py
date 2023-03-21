@@ -10,7 +10,7 @@ import pandas as pd
 from tqdm import tqdm
 import numpy as np
 
-from src.tools import content_merge
+from src.tools.tools import content_merge
 
 if __name__ == "__main__":
 
