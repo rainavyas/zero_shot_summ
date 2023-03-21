@@ -1,5 +1,5 @@
 '''
-ChatGPT used to summarise
+In context k-shot shot learning for ChatGPT
 '''
 
 import openai
@@ -8,30 +8,39 @@ import os
 import argparse
 import pandas as pd
 from tqdm import tqdm
+import numpy as np
 
 from src.tools import content_merge
-        
 
 if __name__ == "__main__":
 
     # Get command line arguments
     commandLineParser = argparse.ArgumentParser()
     commandLineParser.add_argument('--data_path', type=str, default='../../bionlp2023-1a-train-og.csv', help='path to data')
+    commandLineParser.add_argument('--folds_path', type=str, default='home/alta/relevance/vr311/bionlp/split.npy', help='path to fold splits')
+    commandLineParser.add_argument('--fold', type=int, default=0, help='select fold of data to evaluate upon')
     commandLineParser.add_argument('--out_dir', type=str, default='experiments/generated_summaries', help='path to dir to save output summaries')
     commandLineParser.add_argument('--sys_prompt_path', type=str, default='src/prompts/system_prompts.txt', help='select system prompt')
     commandLineParser.add_argument('--sys_prompt_ind', type=int, default=0, help='file for system prompts')
-    commandLineParser.add_argument('--user_prompt_path', type=str, default='src/prompts/user_prompts.txt', help='file for user prompts')
+    commandLineParser.add_argument('--user_prompt_path', type=str, default='src/prompts/user_prompts_context.txt', help='file for user prompts')
     commandLineParser.add_argument('--user_prompt_ind', type=int, default=0, help='select user prompt')
+    commandLineParser.add_argument('--seed', type=int, default=1, help='select seed for reproducibility')
     args = commandLineParser.parse_args()
 
     # Save the command run
     if not os.path.isdir('CMDs'):
         os.mkdir('CMDs')
-    with open('CMDs/summarise_chatgpt.cmd', 'a') as f:
+    with open('CMDs/context_summarise_chatgpt.cmd', 'a') as f:
         f.write(' '.join(sys.argv)+'\n')
 
     # Read the whole dataset
     data = pd.read_csv(args.data_path)
+
+    # split into evaluation and training folds
+    folds = np.load(args.folds_path)
+    train = data.iloc[~folds[args.fold]]
+    test = data.iloc[folds[args.fold]]
+    import pdb; pdb.set_trace()
 
     # load prompts
     with open(args.sys_prompt_path, 'r') as f:
@@ -54,9 +63,3 @@ if __name__ == "__main__":
         # time.sleep(3.1) # necessary for open ai rate limit
     
     data['ChatGPT Summary'] = gpt_summs
-
-    # save data
-    out_file = f'{args.out_dir}/chatgpt_system{args.sys_prompt_ind}_user{args.user_prompt_ind}.csv'
-    data.to_csv(out_file)
-    
-

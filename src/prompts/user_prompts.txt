@@ -1,0 +1,3 @@
+"Summarise these clinical notes."
+"Give a one word or single phrase summary for these clinical notes."
+"Give a one or two word summary for these clinical notes."

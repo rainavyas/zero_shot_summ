@@ -1,0 +1,2 @@
+"You summarise clinical notes."
+"You are a concise summarisation tool."
