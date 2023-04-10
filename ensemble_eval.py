@@ -74,7 +74,7 @@ if __name__ == "__main__":
                 for j in range(args.num_seeds):
                     score = scorer.score(str(row[f'{args.pred_name}_{j}']), str(row[f'{args.pred_name}_{i}']))
                     total += score[metric][2]
-                if total > best:
+                if total > best[1]:
                     best = [i, total]
             selected_sample.append(best[0])
 
