@@ -48,7 +48,7 @@ if __name__ == "__main__":
         rouge2 = []
         rougeL = []
         scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
-        for seed in range(args.num_seeds):
+        for seed in range(1, args.num_seeds+1):
             print('seed', seed)
             pred_col_name = f'{args.pred_name}_seed{seed}'
             r1, r2, rL = corpus_rouge(scorer, data, pred_col_name)
