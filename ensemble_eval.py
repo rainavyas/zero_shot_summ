@@ -48,9 +48,9 @@ if __name__ == "__main__":
         rouge2 = []
         rougeL = []
         scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
-        for seed in range(1, args.num_seeds+1):
-            print('seed', seed)
-            pred_col_name = f'{args.pred_name}_seed{seed}'
+        for sample in range(args.num_seeds):
+            print('sample', sample)
+            pred_col_name = f'{args.pred_name}_{sample}'
             r1, r2, rL = corpus_rouge(scorer, data, pred_col_name)
             rouge1.append(r1)
             rouge2.append(r2)
@@ -64,27 +64,27 @@ if __name__ == "__main__":
     
     if args.selection:
         # Select the most average sample as per the rougeL metric
-        selected_seed = []
+        selected_sample = []
         metric = 'rougeL'
         scorer = rouge_scorer.RougeScorer([metric], use_stemmer=True)
         for _, row in tqdm(data.iterrows(), total=len(data)):
             best = [None, 0] # [seed , rouge_score] 
-            for i in range(1, args.num_seeds+1):
+            for i in range(args.num_seeds):
                 total = 0
-                for j in range(1, args.num_seeds+1):
-                    score = scorer.score(str(row[f'{args.pred_name}_seed{j}']), str(row[f'{args.pred_name}_seed{i}']))
+                for j in range(args.num_seeds):
+                    score = scorer.score(str(row[f'{args.pred_name}_{j}']), str(row[f'{args.pred_name}_{i}']))
                     total += score[metric][2]
                 if total > best:
                     best = [i, total]
-            selected_seed.append(best[0])
+            selected_sample.append(best[0])
 
-        # Evaluate with the selected seed sample
+        # Evaluate with the selected sample
         rouge1 = []
         rouge2 = []
         rougeL = []
         scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
         for i, row in tqdm(data.iterrows(), total=len(data)):
-            score = scorer.score(str(row['Summary']), str(row[f'{args.pred_name}_seed{selected_seed[i]}']))
+            score = scorer.score(str(row['Summary']), str(row[f'{args.pred_name}_{selected_sample[i]}']))
             rouge1.append(score['rouge1'][2])
             rouge2.append(score['rouge2'][2])
             rougeL.append(score['rougeL'][2])
