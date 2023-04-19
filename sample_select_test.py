@@ -27,7 +27,7 @@ if __name__ == "__main__":
     data = []
     for fpath in args.filepaths:
         with open(fpath, 'r') as f:
-            summ = f.readlines(fpath)
+            summ = f.readlines()
         summ = [s.strip('\n') for s in summ]
         data.append(summ)
     
@@ -47,7 +47,7 @@ if __name__ == "__main__":
         selected_sample.append(best[0])
     
     # save selected samples
-    with open(args.out_file, 'w') as f:
+    with open(args.outfile, 'w') as f:
         for sample in selected_sample:
             f.write(sample+'\n')
 
