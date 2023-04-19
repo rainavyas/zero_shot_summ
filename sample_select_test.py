@@ -44,7 +44,7 @@ if __name__ == "__main__":
                 total += score[metric][2]
             if total > best[1]:
                 best = [i, total]
-        selected_sample.append(best[0])
+        selected_sample.append(samples[best[0]])
     
     # save selected samples
     with open(args.outfile, 'w') as f:
