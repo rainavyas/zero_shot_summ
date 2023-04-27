@@ -6,13 +6,15 @@ import sys
 import os
 import argparse
 from tqdm import tqdm
+import glob
 from rouge_score import rouge_scorer
 
 if __name__ == "__main__":
 
     # Get command line arguments
     commandLineParser = argparse.ArgumentParser()
-    commandLineParser.add_argument('--filepaths', type=str, nargs='+', required=True, help='path to data outputs with predicted summaries')
+    commandLineParser.add_argument('--filepaths', type=str, nargs='+', required=False, help='path to data outputs with predicted summaries')
+    commandLineParser.add_argument('--filedir', type=str, nargs='+', required=False, help='Alternative give dir with all txt files')
     commandLineParser.add_argument('--outfile', type=str, required=True, help='path to save final predictions')
     args = commandLineParser.parse_args()
 
@@ -25,7 +27,12 @@ if __name__ == "__main__":
 
     # load data
     data = []
-    for fpath in args.filepaths:
+    if len(args.filepaths) == 0:
+        # use file dir
+        filepaths = glob.glob(f'{args.filedir}/*.txt')
+    else:
+        filepaths = args.filepaths
+    for fpath in filepaths:
         with open(fpath, 'r') as f:
             summ = f.readlines()
         summ = [s.strip('\n') for s in summ]
