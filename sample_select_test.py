@@ -14,7 +14,7 @@ if __name__ == "__main__":
     # Get command line arguments
     commandLineParser = argparse.ArgumentParser()
     commandLineParser.add_argument('--filepaths', type=str, nargs='+', required=False, help='path to data outputs with predicted summaries')
-    commandLineParser.add_argument('--filedir', type=str, nargs='+', required=False, help='Alternative give dir with all txt files')
+    commandLineParser.add_argument('--filedir', type=str, required=False, help='Alternative give dir with all txt files')
     commandLineParser.add_argument('--outfile', type=str, required=True, help='path to save final predictions')
     args = commandLineParser.parse_args()
 
