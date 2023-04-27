@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     # load data
     data = []
-    if len(args.filepaths) == 0:
+    if not args.filepaths:
         # use file dir
         filepaths = glob.glob(f'{args.filedir}/*.txt')
     else:
